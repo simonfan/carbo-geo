@@ -1,0 +1,9 @@
+bower_components
+node_modules
+.git
+
+# Generated style-modules
+src/**/*-styles.html
+
+# Temporary files used for vulcanization
+tmp

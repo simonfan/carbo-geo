@@ -1,0 +1,14 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="carbo-geo-styles.html">
+
+<dom-module id="carbo-geo">
+    <style include="carbo-geo-styles"></style>
+
+    <template teste="{{teste}}">
+        I am carbo-geo
+        <p>{{display}}</p>
+        <p if="{{display}}">{{latitude}} - {{longitude}}</p>
+    </template>
+
+    <script src="carbo-geo.js"></script>
+</dom-module>

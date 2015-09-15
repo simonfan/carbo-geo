@@ -1,0 +1,16 @@
+{
+  "name": "carbo-geo",
+  "version": "0.0.0",
+  "authors": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "carbo-geo",
+    "carbo-geos"
+  ],
+  "dependencies": {
+    "polymer": "~1.1.3"
+  }
+}
