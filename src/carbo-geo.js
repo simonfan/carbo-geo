@@ -28,15 +28,10 @@
             CarboGeo = this;
         },
 
-        /**
-         * Execute when device is ready
-         */
+
          _whenCordovaReady: function (){
              navigator.geolocation.getCurrentPosition(this.geolocationSuccess, this.geolocationError);
          },
-         /**
-          * start the watch for geolocation
-          */
 
          geolocationSuccess: function (location) {
            CarboGeo.set('latitude',location.coords.latitude);
@@ -45,9 +40,7 @@
            CarboGeo.classList.add('success');
            console.log('geolocation loaded: ' , location);
          },
-         /**
-          * start the watch for geolocation
-          */
+
          geolocationError: function () {
             CarboGeo.set('class','danger');
             CarboGeo.classList.add('error');
