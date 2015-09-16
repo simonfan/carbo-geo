@@ -1,12 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
 <dom-module id="carbo-geo">
-    <style>
-    :host{
-      width: 100%;
-      border:none;
-    }
-    </style>
     <script>
       var watcher = null;
       Polymer({
@@ -24,14 +18,23 @@
             timeout:{ type: Number, value: 5000}
           },
 
+        /**
+         * Called whenever the component is ready and the
+         * dom nodes are available for inspection.
+         * test if auto is setted to call request
+         */
           ready: function() {
             if(this.auto){
               this.request();
             }
           },
 
+          /**
+         *  Make a request to navigator.geolocation
+         *  call  _geolocationSuccess() on success
+         *  returns a promise with location object.
+         */
           request: function(){
-            var component = this;
             var options = {
               enableHighAccuracy: this.highAccuracy,
               timeout: this.timeout
@@ -40,24 +43,28 @@
 
               var success = function(location){
                 resolve(location);
-                component._geolocationSuccess(location);
+                this._geolocationSuccess(location);
               };
 
-              var error = function(error){
+              var error = function(ex){
                 reject(error);
-                component._geolocationError(error);
+                this._geolocationError(ex);
               };
 
 
-              if(!component.watch){
+              if(!this.watch){
                 navigator.geolocation.getCurrentPosition(success.bind(this), error.bind(this) , options);
               }
 
-            });
+            }.bind(this));
             return promise;
 
           },
 
+            /**
+          * Observer for watch, when it is true, call
+          * watchPosition from navigator.geolocation
+          */
           _watchChanged: function() {
             if (watcher) {
               navigator.geolocation.clearWatch(watcher);
@@ -74,6 +81,10 @@
             }
           },
 
+            /**
+          * Set local attributes when location is
+          * success and fires carbo-geo-response event.
+          */
           _geolocationSuccess: function (location) {
             this._setLatitude(location.coords.latitude);
             this._setLongitude(location.coords.longitude);
@@ -83,6 +94,10 @@
             this.fire('carbo-geo-response', {coords: location.coords});
           },
 
+            /**
+          * called when a location gets error in request
+          * and fires carbo-geo-error event.
+          */
           _geolocationError: function (e) {
             this.fire('carbo-geo-error', {error: e});
             this._setLoaded(false);
