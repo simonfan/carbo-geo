@@ -1,0 +1,91 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/google-map/google-map.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="/bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="carbo-geo.html">
+
+<dom-module id="carbo-geo-test">
+    <style>
+        :host{
+          font-family: sans-serif, open-sans;
+          font-weight: 100;
+        }
+        google-map{
+          height: 10rem;
+        }
+        paper-button{
+          min-width: 5.14em;
+          max-width: 35em;
+          display: block;
+        }
+        #output{
+          position: relative;
+          min-width: 5.14em;
+          max-width: 35em;
+          margin: 0.29em;
+          background: transparent;
+          text-align: center;
+          font: inherit;
+          text-transform: uppercase;
+          outline-width: 0;
+          border-radius: 3px;
+          border:0.1rem solid #ddd;
+        }
+        #output p {
+          padding: 0rem 0.5rem;
+        }
+        #icon.rotate{
+          -webkit-animation:spin 4s linear infinite;
+          -moz-animation:spin 4s linear infinite;
+          animation:spin 4s linear infinite;
+        }
+
+        @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+        @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+        @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+    </style>
+    <template>
+
+      <carbo-geo id="carbo-geo" high-accuracy latitude="{{latitude}}" longitude="{{longitude}}" coords="{{coords}}" loaded="{{loaded}}"> </carbo-geo>
+
+      <div  id="output">
+        <p>latitude: <b>{{latitude}}</b> </p>
+        <p>longitude: <b>{{longitude}}</b> </p>
+        <google-map latitude="{{latitude}}" longitude="{{longitude}}" draggable="false" disable-zoom="true">
+        </google-map>
+      </div>
+
+      <paper-button raised on-click="click">
+         <iron-icon id="icon" icon="{{icon}}"></iron-icon> <b>{{texto}}</b>
+      </paper-button>
+
+    </template>
+
+    <script>
+      Polymer({
+          is: 'carbo-geo-test',
+
+          ready:function(){
+            this.icon = "maps:my-location";
+            this.texto = "Carregar geolocalização"
+            this.latitude = undefined;
+            this.longitude = undefined;
+          },
+
+          click: function(){
+            this.icon = "refresh";
+            this.$["icon"].classList.add("rotate");
+            this.texto = "Carregaregando ... "
+            this.$["carbo-geo"].request().then(function(){
+              this.icon = "maps:my-location";
+              this.$["icon"].classList.remove("rotate");
+              this.texto = "Geolocalização carregada"
+            }.bind(this));
+          }
+
+      });
+    </script>
+</dom-module>
