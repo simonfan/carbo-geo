@@ -1,0 +1,74 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="carbo-geo">
+    <style>
+    :host{
+      width: 100%;
+      border:none;
+    }
+    </style>
+    <script>
+      var watcher = null;
+      Polymer({
+
+          is: 'carbo-geo',
+
+          properties: {
+            coords:{type: Object, notify: true, reflectToAttribute: true, readOnly: true },
+            latitude: {type: Number, notify: true, reflectToAttribute: true, readOnly: true },
+            longitude: {type: Number, notify: true, reflectToAttribute: true, readOnly: true },
+            auto: { type: Boolean, value: false},
+            watch: { type: Boolean, value: false , observer: '_watchChanged'},
+            highAccuracy:{ type: Boolean, value: false},
+            timeout:{ type: Number, value: 5000}
+          },
+
+          ready: function() {
+            if(this.auto){
+              this.request();
+            }
+          },
+
+          request: function(){
+            var options = {
+              enableHighAccuracy: this.highAccuracy,
+              timeout: this.timeout
+            };
+            if(!this.watch){
+              navigator.geolocation.getCurrentPosition(this._geolocationSuccess.bind(this), this._geolocationError.bind(this) , options);
+            }
+          },
+
+          _watchChanged: function() {
+            if (watcher) {
+              navigator.geolocation.clearWatch(watcher);
+              watcher = null;
+            }
+            if (this.watch) {
+              var options = {
+                enableHighAccuracy: this.highAccuracy,
+                timeout: this.timeout
+              };
+              watcher = navigator.geolocation.watchPosition(
+                this._geolocationSuccess.bind(this),
+                this._geolocationError.bind(this) , options);
+            }
+          },
+
+          _geolocationSuccess: function (location) {
+            this._setLatitude(location.coords.latitude);
+            this._setLongitude(location.coords.longitude);
+            this._setCoords(location.coords);
+            Polymer.dom(this).setAttribute('value',  location.coords);
+            this.fire('carbo-geo-response', {coords: location.coords});
+          },
+
+          _geolocationError: function (e) {
+            this.fire('carbo-geo-error', {error: e});
+            console.log(e);
+            this.classList.add('error');
+          },
+
+      });
+    </script>
+</dom-module>

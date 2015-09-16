@@ -1,0 +1,30 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/google-map/google-map.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="../carbo-geo.html">
+
+<dom-module id="form-test">
+    <style>
+        google-map{
+          height: 150px;
+        }
+    </style>
+    <template>
+
+        <carbo-geo  id="carbo-geo" high-accuracy latitude="{{latitude}}" longitude="{{longitude}}"> </carbo-geo>
+        <p>your latitude is: <b>{{latitude}}</b> </p>
+        <p>your longitude is: <b>{{longitude}}</b> </p>
+        <google-map latitude="{{latitude}}" longitude="{{longitude}}" draggable="false" disable-zoom="true">
+        </google-map>
+
+    </template>
+
+    <script>
+      Polymer({
+          is: 'form-test',
+          attached: function() {
+            this.$["carbo-geo"].request();
+          },
+      });
+    </script>
+</dom-module>
