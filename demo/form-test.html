@@ -1,6 +1,9 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/google-map/google-map.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../carbo-geo.html">
 
 <dom-module id="form-test">
@@ -8,23 +11,74 @@
         google-map{
           height: 150px;
         }
+        #output.hide {
+          display: none;
+        }
+        #output.show {
+          display: block;
+        }
+        #icon.rotate{
+          -webkit-animation:spin 4s linear infinite;
+          -moz-animation:spin 4s linear infinite;
+          animation:spin 4s linear infinite;
+
+        }
+        @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+        @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+        @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
     </style>
     <template>
 
-        <carbo-geo  id="carbo-geo" high-accuracy latitude="{{latitude}}" longitude="{{longitude}}"> </carbo-geo>
+
+      <carbo-geo id="carbo-geo" high-accuracy latitude="{{latitude}}" longitude="{{longitude}}" coords="{{coords}}" loaded="{{loaded}}"> </carbo-geo>
+
+
+      <div  id="output">
         <p>your latitude is: <b>{{latitude}}</b> </p>
         <p>your longitude is: <b>{{longitude}}</b> </p>
-        <google-map latitude="{{latitude}}" longitude="{{longitude}}" draggable="false" disable-zoom="true">
+        <google-map latitude="{{latitude}}"  longitude="{{longitude}}" draggable="false" disable-zoom="true">
         </google-map>
+      </div>
+      <input name="latitude" value="{{latitude}}">
+      <input name="longitude" value="{{longitude}}">
+      <paper-button raised on-click="click">
+         <iron-icon id="icon" icon="{{icon}}"></iron-icon> <b>{{texto}}</b>
+      </paper-button>
+
 
     </template>
 
     <script>
       Polymer({
           is: 'form-test',
-          attached: function() {
-            this.$["carbo-geo"].request();
+          properties: {
+            loaded: { type: Boolean, value: false , observer: '_watchLoaded'},
           },
+          ready:function(){
+            this.icon = "maps:my-location";
+            this.texto = "Carregar geolocalização"
+          },
+          _watchLoaded: function() {
+            if(this.loaded){
+              this.$["output"].classList.add("show");
+            }
+            else{
+              this.$["output"].classList.add("hide");
+            }
+          },
+
+          click: function(){
+            this.icon = "refresh";
+            this.$["icon"].classList.add("rotate");
+            this.texto = "Carregaregando ... "
+            this.$["carbo-geo"].request().then(function(){
+              this.icon = "maps:my-location";
+              this.$["icon"].classList.remove("rotate");
+              this.texto = "Geolocalização carregada"
+            }.bind(this));
+          }
+
       });
     </script>
 </dom-module>

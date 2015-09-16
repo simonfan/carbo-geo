@@ -30,7 +30,7 @@
       var geo = document.getElementById('carbo-geo');
 
       geo.request();
-      geo.addEventListener('carbo-geo-success', function(e){
+      geo.addEventListener('carbo-geo-response', function(e){
 
         map.latitude = e.detail.coords.latitude;
         map.longitude = e.detail.coords.longitude;
