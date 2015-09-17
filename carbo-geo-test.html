@@ -54,7 +54,12 @@
       <div  id="output">
         <p>latitude: <b>{{latitude}}</b> </p>
         <p>longitude: <b>{{longitude}}</b> </p>
-        <google-map latitude="{{latitude}}" longitude="{{longitude}}" draggable="false" disable-zoom="true">
+        <google-map latitude="{{latitude}}" longitude="{{longitude}}" draggable="false" disable-zoom="false" zoom="15">
+          <google-map-marker 
+            latitude="{{latitude}}" 
+            longitude="{{longitude}}"
+            title="Go Giants!"
+          ></google-map-marker>
         </google-map>
       </div>
 
