@@ -10,6 +10,10 @@
     "carbo-geo",
     "carbo-geos"
   ],
+  "main": [
+    "carbo-geo-test.html",
+    "carbo-geo.html"
+  ],
   "dependencies": {
     "polymer": "~1.1.3",
     "paper-button": "PolymerElements/paper-button#~1.0.4",
